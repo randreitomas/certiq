@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Certiq — Beautiful certificates in minutes",
   description: "Create personalized certificates from one template and a CSV. Private, free, and entirely in your browser.",
-  icons: { icon: "/certiq-logo.png" },
   openGraph: {
     title: "Certiq — Beautiful certificates in minutes",
     description: "Create personalized certificates from one template and a CSV. Private, free, and entirely in your browser.",
