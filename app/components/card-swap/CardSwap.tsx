@@ -12,7 +12,6 @@ import {
   type CSSProperties,
   type ReactElement,
   type ReactNode,
-  type Ref,
 } from "react";
 import "./CardSwap.css";
 
@@ -97,10 +96,8 @@ export default function CardSwap({
         };
 
   const childArr = useMemo(() => Children.toArray(children), [children]);
-  const refs = useMemo(
-    () => childArr.map(() => ({ current: null as HTMLDivElement | null })),
-    [childArr.length],
-  );
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  refs.current.length = childArr.length;
 
   const order = useRef(Array.from({ length: childArr.length }, (_, i) => i));
   const tlRef = useRef<gsap.core.Timeline | null>(null);
@@ -108,16 +105,16 @@ export default function CardSwap({
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const total = refs.length;
-    refs.forEach((r, i) => {
-      if (r.current) placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
+    const total = refs.current.length;
+    refs.current.forEach((el, i) => {
+      if (el) placeNow(el, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
     });
 
     const swap = () => {
       if (order.current.length < 2) return;
 
       const [front, ...rest] = order.current;
-      const elFront = refs[front].current;
+      const elFront = refs.current[front];
       if (!elFront) return;
 
       const tl = gsap.timeline();
@@ -131,9 +128,9 @@ export default function CardSwap({
 
       tl.addLabel("promote", `-=${config.durDrop * config.promoteOverlap}`);
       rest.forEach((idx, i) => {
-        const el = refs[idx].current;
+        const el = refs.current[idx];
         if (!el) return;
-        const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
+        const slot = makeSlot(i, cardDistance, verticalDistance, refs.current.length);
         tl.set(el, { zIndex: slot.zIndex }, "promote");
         tl.to(
           el,
@@ -148,7 +145,7 @@ export default function CardSwap({
         );
       });
 
-      const backSlot = makeSlot(refs.length - 1, cardDistance, verticalDistance, refs.length);
+      const backSlot = makeSlot(refs.current.length - 1, cardDistance, verticalDistance, refs.current.length);
       tl.addLabel("return", `promote+=${config.durMove * config.returnDelay}`);
       tl.call(() => {
         gsap.set(elFront, { zIndex: backSlot.zIndex });
@@ -204,13 +201,15 @@ export default function CardSwap({
     const element = child as ReactElement<{ style?: CSSProperties; onClick?: (e: React.MouseEvent) => void; className?: string }>;
     return cloneElement(element, {
       key: i,
-      ref: refs[i] as Ref<HTMLDivElement>,
+      ref: (el: HTMLDivElement | null) => {
+        refs.current[i] = el;
+      },
       style: { width, height, ...(element.props.style ?? {}) },
       onClick: (e: React.MouseEvent) => {
         element.props.onClick?.(e);
         onCardClick?.(i);
       },
-    } as React.Attributes & { ref?: Ref<HTMLDivElement> });
+    } as React.Attributes & { ref?: (el: HTMLDivElement | null) => void });
   });
 
   return (
