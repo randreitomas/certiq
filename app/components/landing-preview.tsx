@@ -22,55 +22,44 @@ const CERTIFICATES = [
     name: "Sofia Williams",
     detail: "Product Innovation Forum · August 2026",
   },
-  {
-    org: "Certiq Academy",
-    title: "Certificate of Achievement",
-    name: "Daniel Kim",
-    detail: "Engineering Bootcamp · August 2026",
-  },
-  {
-    org: "Certiq Academy",
-    title: "Certificate of Completion",
-    name: "Amara Okafor",
-    detail: "Leadership Intensive · August 2026",
-  },
 ];
 
-function useCardSwapSize() {
+function useCardSwapSize(cardCount: number) {
   const [size, setSize] = useState({
-    width: 420,
-    height: 294,
-    cardDistance: 50,
-    verticalDistance: 58,
-    stageMinHeight: 480,
+    width: 400,
+    height: 280,
+    cardDistance: 48,
+    verticalDistance: 52,
+    stageMinHeight: 380,
   });
 
   useEffect(() => {
     const update = () => {
       const vw = window.innerWidth;
-      const width = Math.min(460, Math.max(280, vw * 0.44));
-      const height = Math.round(width * 0.7);
-      const scale = width / 420;
-      const verticalDistance = Math.round(58 * scale);
+      const width = Math.min(440, Math.max(260, vw * 0.78));
+      const height = Math.round(width * 0.68);
+      const scale = width / 400;
+      const verticalDistance = Math.round(52 * scale);
+      const stackDepth = Math.max(0, cardCount - 1);
       setSize({
         width: Math.round(width),
         height,
-        cardDistance: Math.round(50 * scale),
+        cardDistance: Math.round(48 * scale),
         verticalDistance,
-        stageMinHeight: height + verticalDistance * 4 + 72,
+        stageMinHeight: height + verticalDistance * stackDepth + 56,
       });
     };
 
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, []);
+  }, [cardCount]);
 
   return size;
 }
 
 export function LandingPreview() {
-  const { width, height, cardDistance, verticalDistance, stageMinHeight } = useCardSwapSize();
+  const { width, height, cardDistance, verticalDistance, stageMinHeight } = useCardSwapSize(CERTIFICATES.length);
 
   return (
     <section className="card-showcase" aria-hidden="true">
@@ -82,7 +71,7 @@ export function LandingPreview() {
           verticalDistance={verticalDistance}
           delay={4500}
           pauseOnHover
-          skewAmount={5}
+          skewAmount={4}
         >
           {CERTIFICATES.map((cert) => (
             <Card key={cert.name} className="cert-swap-card">
