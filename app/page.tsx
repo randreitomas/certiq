@@ -23,7 +23,7 @@ const STEPS = [
 
 export default function Home() {
   return (
-    <main className="app-shell landing-shell">
+    <main className="landing-shell">
       <SiteHeader />
 
       <section className="hero" id="top">
@@ -38,18 +38,16 @@ export default function Home() {
 
       <LandingPreview />
 
-      <section className="how-section" id="how-it-works">
-        <div className="how-section-inner">
-          <h2>How it works</h2>
-          <div className="how-grid">
-            {STEPS.map((step) => (
-              <article key={step.num} className="how-card">
-                <span className="how-card-num">{step.num}</span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </article>
-            ))}
-          </div>
+      <section className="landing-how-it-works" id="how-it-works">
+        <h2 className="landing-section-title">How it works</h2>
+        <div className="landing-steps-grid">
+          {STEPS.map((step) => (
+            <article key={step.num} className="landing-step-card">
+              <span className="landing-step-number">{step.num}</span>
+              <h3 className="landing-step-title">{step.title}</h3>
+              <p className="landing-step-body">{step.body}</p>
+            </article>
+          ))}
         </div>
       </section>
 
