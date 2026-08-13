@@ -11,7 +11,7 @@ export const SAMPLE_ATTENDEES: Attendee[] = [
 ];
 
 export const SAMPLE_TEMPLATE_PATH = "/sample-template.png";
-export const SAMPLE_TEMPLATE_NAME = "TechnoFair certificate";
+export const SAMPLE_TEMPLATE_NAME = "";
 
 export const SAMPLE_STYLE_DEFAULTS = {
   x: 50,

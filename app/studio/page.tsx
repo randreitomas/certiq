@@ -36,7 +36,7 @@ export default function StudioPage() {
   const [templateName, setTemplateName] = useState(SAMPLE_TEMPLATE_NAME);
   const [templateImage, setTemplateImage] = useState<HTMLImageElement | null>(null);
   const [attendees, setAttendees] = useState(SAMPLE_ATTENDEES);
-  const [csvName, setCsvName] = useState("sample-attendees.csv");
+  const [csvName, setCsvName] = useState("");
   const [selected, setSelected] = useState(0);
   const [x, setX] = useState<number>(SAMPLE_STYLE_DEFAULTS.x);
   const [y, setY] = useState<number>(SAMPLE_STYLE_DEFAULTS.y);
@@ -195,12 +195,12 @@ export default function StudioPage() {
             <input ref={imageInput} hidden type="file" accept="image/png,image/jpeg" onChange={(e: ChangeEvent<HTMLInputElement>) => handleTemplate(e.target.files?.[0])} />
             <button className={`upload-card ${fileDragTarget === "image" ? "is-dragging" : ""}`} onClick={() => imageInput.current?.click()} onDragEnter={(e) => { e.preventDefault(); setFileDragTarget("image"); }} onDragOver={(e) => e.preventDefault()} onDragLeave={() => setFileDragTarget(null)} onDrop={(e) => dropFile(e, "image")} aria-label="Choose or drop a certificate template image">
               <span><strong>{fileDragTarget === "image" ? "Drop template here" : "Template"}</strong><small>{templateName}</small></span>
-              <b>{fileDragTarget === "image" ? "Release" : templateUrl ? "Change" : "Choose"}</b>
+              <b>{fileDragTarget === "image" ? "Release" : templateUrl ? "Upload" : "Choose"}</b>
             </button>
             <input ref={csvInput} hidden type="file" accept=".csv,text/csv" onChange={(e: ChangeEvent<HTMLInputElement>) => void handleCsv(e.target.files?.[0])} />
             <button className={`upload-card ${fileDragTarget === "csv" ? "is-dragging" : ""}`} onClick={() => csvInput.current?.click()} onDragEnter={(e) => { e.preventDefault(); setFileDragTarget("csv"); }} onDragOver={(e) => e.preventDefault()} onDragLeave={() => setFileDragTarget(null)} onDrop={(e) => dropFile(e, "csv")} aria-label="Choose or drop an attendee CSV file">
               <span><strong>{fileDragTarget === "csv" ? "Drop CSV here" : "Attendee list"}</strong><small>{csvName}</small></span>
-              <b>{fileDragTarget === "csv" ? "Release" : "Change"}</b>
+              <b>{fileDragTarget === "csv" ? "Release" : "Upload"}</b>
             </button>
           </div>
 
