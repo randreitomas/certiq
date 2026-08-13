@@ -22,7 +22,7 @@ test("landing and studio routes exist", async () => {
   assert.match(page, /Start creating/);
   assert.match(studio, /"use client"/);
   assert.match(studio, /makeCertificate/);
-  assert.match(layout, /Certiq — Beautiful certificates in minutes/);
+  assert.match(layout, /Certiq — Certificates in minutes/);
 });
 
 test("required public assets exist", async () => {
