@@ -38,3 +38,11 @@ test("certificate helpers parse CSV names", async () => {
   assert.match(source, /export function parseCsv/);
   assert.match(source, /"name", "full name", "fullname", "attendee"/);
 });
+
+test("docs viewer route exists and references key sections", async () => {
+  const docs = await readFile(new URL("app/docs/page.tsx", root), "utf8");
+  assert.match(docs, /"use client"/);
+  assert.match(docs, /overview/);
+  assert.match(docs, /risk-map/);
+  assert.match(docs, /safe-starts/);
+});
