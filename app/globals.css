@@ -488,6 +488,9 @@ button, a, select, input { -webkit-tap-highlight-color: transparent; }
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--page-bg);
+}
+
+.studio-shell .studio {
   flex: 1 1 auto;
   min-height: 0;
   margin: 8px auto;
