@@ -18,8 +18,10 @@ test("landing and studio routes exist", async () => {
     readFile(new URL("app/layout.tsx", root), "utf8"),
   ]);
 
-  assert.match(page, /SiteHeader/);
-  assert.match(page, /Start creating/);
+  assert.match(page, /Launch Certiq/);
+  assert.doesNotMatch(page, /LandingPreview|product-table/);
+  assert.doesNotMatch(page, /SiteHeader/);
+  assert.doesNotMatch(page, /CardSwap/);
   assert.match(studio, /"use client"/);
   assert.match(studio, /makeCertificate/);
   assert.match(layout, /Certiq — Certificates in minutes/);

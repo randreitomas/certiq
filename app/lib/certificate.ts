@@ -1,13 +1,9 @@
-import { FONT_SANS, FONT_SERIF, certificateFontWeight } from "./fonts";
+import { FONT_SANS, FONT_SERIF, certificateFontWeight, canvasFontString } from "./fonts";
 
 export type Attendee = { name: string; email?: string };
 
 export const SAMPLE_ATTENDEES: Attendee[] = [
-  { name: "Alexandra Morgan", email: "alex@example.com" },
-  { name: "Marcus Chen", email: "marcus@example.com" },
-  { name: "Sofia Williams", email: "sofia@example.com" },
-  { name: "Daniel Kim", email: "daniel@example.com" },
-  { name: "Amara Okafor", email: "amara@example.com" },
+  { name: "Name Goes Here"},
 ];
 
 export const SAMPLE_TEMPLATE_PATH = "/sample-template.png";
@@ -15,10 +11,10 @@ export const SAMPLE_TEMPLATE_NAME = "";
 
 export const SAMPLE_STYLE_DEFAULTS = {
   x: 50,
-  y: 43,
-  size: 50,
+  y: 41.8,
+  size: 55,
   color: "#333333",
-  font: "'Cormorant Garamond', Garamond, serif",
+  font: "Cormorant Garamond",
   uppercase: false,
 } as const;
 
@@ -77,7 +73,7 @@ export function measureNameWidth(
   const el = getTextMeasurer();
   if (!el) return 0;
   el.textContent = text;
-  el.style.fontFamily = options.font;
+  el.style.fontFamily = `"${options.font}"`;
   el.style.fontWeight = options.weight;
   el.style.fontSize = `${options.size}px`;
   el.style.letterSpacing = options.letterSpacing ?? NAME_LETTER_SPACING;
@@ -131,6 +127,31 @@ function splitCsvLine(line: string) {
   }
   cells.push(cell.trim());
   return cells;
+}
+
+export async function parseSpreadsheet(file: File): Promise<Attendee[]> {
+  if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
+    const { read, utils } = await import("xlsx");
+    const buffer = await file.arrayBuffer();
+    const workbook = read(buffer, { type: "array" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
+    if (!rows.length) return [];
+    return rows.flatMap((row) => {
+      const keys = Object.keys(row).map((k) => k.toLowerCase());
+      const nameKey = Object.keys(row).find((k) =>
+        ["name", "full name", "fullname", "attendee"].includes(k.toLowerCase())
+      ) ?? Object.keys(row)[0];
+      const emailKey = Object.keys(row).find((k) =>
+        ["email", "email address"].includes(k.toLowerCase())
+      );
+      const name = String(row[nameKey] ?? "").trim();
+      if (!name) return [];
+      return [{ name, email: emailKey ? String(row[emailKey] ?? "").trim() : undefined }];
+    });
+  }
+  // fallback to CSV
+  return parseCsv(await file.text());
 }
 
 export function parseCsv(text: string): Attendee[] {
@@ -223,7 +244,7 @@ export function makeCertificate(
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillStyle = options.color;
-  ctx.font = `${certificateFontWeight(options.font)} ${fittedSize}px ${options.font}`;
+  ctx.font = canvasFontString(options.font, certificateFontWeight(options.font), fittedSize);
   ctx.fillText(displayName, px, py);
   return canvas;
 }
