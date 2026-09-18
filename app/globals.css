@@ -17,6 +17,7 @@
   --muted: #5c6b5e;
   --paper: #fffdfa;
   --surface: #fbfaf7;
+  --page-bg: #f3f4f2;
   --ui-sans: "Plus Jakarta Sans", -apple-system, system-ui, sans-serif;
   --ui-serif: var(--font-cormorant), serif;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -119,7 +120,7 @@ button, a, select, input { -webkit-tap-highlight-color: transparent; }
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
-  background: #f3f4f2;
+  background: var(--page-bg);
   color: #14201b;
 }
 
@@ -486,10 +487,7 @@ button, a, select, input { -webkit-tap-highlight-color: transparent; }
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #fff;
-}
-
-.studio-shell .studio {
+  background: var(--page-bg);
   flex: 1 1 auto;
   min-height: 0;
   margin: 8px auto;
