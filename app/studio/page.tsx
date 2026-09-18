@@ -373,26 +373,24 @@ export default function StudioPage() {
         </section>
 
         <aside className="right-panel">
-          <div className="studio-section">
-            <div className="step-title step-title--finish">
-              <span>03</span>
-              <div><h2>Review & export</h2><p>{attendees.length} certificate{attendees.length === 1 ? "" : "s"} ready</p></div>
-            </div>
-            <div className="attendee-list">
-              {attendees.map((person, index) => (
-                <button
-                  key={`${person.name}-${index}`}
-                  type="button"
-                  className={`attendee-row${selected === index ? " active" : ""}`}
-                  onClick={() => setSelected(index)}
-                  aria-current={selected === index ? "true" : undefined}
-                >
-                  <span className="attendee-row-num">{index + 1}</span>
-                  <span className="attendee-row-name">{person.name}</span>
-                  <span className="attendee-row-check" aria-hidden="true">✓</span>
-                </button>
-              ))}
-            </div>
+          <div className="step-title step-title--finish">
+            <span>03</span>
+            <div><h2>Review & export</h2><p>{attendees.length} certificate{attendees.length === 1 ? "" : "s"} ready</p></div>
+          </div>
+          <div className="attendee-list">
+            {attendees.map((person, index) => (
+              <button
+                key={`${person.name}-${index}`}
+                type="button"
+                className={`attendee-row${selected === index ? " active" : ""}`}
+                onClick={() => setSelected(index)}
+                aria-current={selected === index ? "true" : undefined}
+              >
+                <span className="attendee-row-num">{index + 1}</span>
+                <span className="attendee-row-name">{person.name}</span>
+                <span className="attendee-row-check" aria-hidden="true">✓</span>
+              </button>
+            ))}
           </div>
           <div className="export-box">
             <div className="export-progress-row">
